@@ -31,6 +31,69 @@ API Endpoints
 8. /chat/getUsers: Get All users
 9. /chat/getUser: Get single user
 
+## Tables to be created in PostgreSQL
+
+1. chatrooms:
+   -- Table: public.chatrooms
+
+   -- DROP TABLE IF EXISTS public.chatrooms;
+   
+   CREATE TABLE IF NOT EXISTS public.chatrooms
+   (
+       room_id integer NOT NULL DEFAULT nextval('chatrooms_id_seq'::regclass),
+       created_at timestamp without time zone NOT NULL DEFAULT now(),
+       users character varying(255)[] COLLATE pg_catalog."default" NOT NULL,
+       is_private boolean NOT NULL DEFAULT true,
+       name character varying(255) COLLATE pg_catalog."default",
+       CONSTRAINT chatrooms_pkey PRIMARY KEY (room_id)
+   )
+   
+   TABLESPACE pg_default;
+   
+   ALTER TABLE IF EXISTS public.chatrooms
+       OWNER to postgres;
+
+2. messages:
+   -- Table: public.messages
+
+   -- DROP TABLE IF EXISTS public.messages;
+   
+   CREATE TABLE IF NOT EXISTS public.messages
+   (
+       id integer NOT NULL DEFAULT nextval('messages_id_seq'::regclass),
+       room_id integer NOT NULL,
+       message text COLLATE pg_catalog."default" NOT NULL,
+       sender character varying(255) COLLATE pg_catalog."default" NOT NULL,
+       created_at timestamp without time zone NOT NULL DEFAULT now(),
+       CONSTRAINT messages_pkey PRIMARY KEY (id)
+   )
+   
+   TABLESPACE pg_default;
+   
+   ALTER TABLE IF EXISTS public.messages
+       OWNER to postgres;
+
+3. users:
+   -- Table: public.users
+
+   -- DROP TABLE IF EXISTS public.users;
+   
+   CREATE TABLE IF NOT EXISTS public.users
+   (
+       username character varying(255) COLLATE pg_catalog."default" NOT NULL,
+       password character varying(255) COLLATE pg_catalog."default" NOT NULL,
+       firstname character varying(255) COLLATE pg_catalog."default" NOT NULL,
+       lastname character varying(255) COLLATE pg_catalog."default" NOT NULL,
+       email character varying(255) COLLATE pg_catalog."default" NOT NULL,
+       created_at timestamp without time zone NOT NULL DEFAULT now(),
+       CONSTRAINT users_pkey PRIMARY KEY (username)
+   )
+   
+   TABLESPACE pg_default;
+   
+   ALTER TABLE IF EXISTS public.users
+       OWNER to postgres;
+
 Technologies Used
 Node.js
 Express.js
